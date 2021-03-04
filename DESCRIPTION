@@ -2,6 +2,16 @@ Package: BTIPFlow
 Title: What the Package Does (This Package Assists with Flow Analysis)
 Version: 0.0.0.9000
 Authors@R: Noah
+Authors@R: 
+    person(given = "Noah",
+           family = "Jones",
+           role = c("aut", "cre"),
+           email = "noahtjones@ufl.edu",
+    person(given = "First",
+           family = "Last",
+           role = c("aut", "cre"),
+           email = "first.last@example.com",
+           comment = c(ORCID = "YOUR-ORCID-ID"))
 Description: This package tries to make the process of analyzing flow data easier and more automatic for more R users.
 License: MIT + file LICENSE
 Encoding: UTF-8
