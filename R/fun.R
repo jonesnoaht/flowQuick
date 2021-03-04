@@ -69,26 +69,29 @@ quick_gate <- function(gs) {
   }
   gs_get_pop_paths(gs)
 
-  pgon <- matrix(c(1.2*10^4,1,
-                   2*10^4,4*10^4,
-                   4*10^4,1.2*10^5,
-                   2.2*10^5,1.2*10^5,
-                   2.2*10^5,1),
+  pgon <- matrix(c(10^4, 1,
+                   10^4, 10^4,
+                   10^4, 10^5,
+                   10^5, 10^5,
+                   10^5, 1),
                  ncol=2, byrow = TRUE)
   colnames(pgon) <- c("FSC-A","SSC-A")
+
   cells <- polygonGate(.gate = pgon, filterId="Cells")
   gs_pop_add(gs, cells)
-  FSC_singlets <- rectangleGate("FSC-A"=c(50,15000),
-                                "SSC-A"=c(50000,100000),
+  FSC_singlets <- rectangleGate("FSC-H"=c(50, 15000),
+                                "FSC-W"=c(50000, 100000),
                                 filterId="FSC-singlet")
   gs_pop_add(gs, FSC_singlets, parent = "Cells")
-  SSC_singlets <- rectangleGate("FSC-A"=c(50,15000),
-                                "SSC-A"=c(50000,100000),
+  SSC_singlets <- rectangleGate("SSC-H"=c(50, 15000),
+                                "SSC-W"=c(50000, 100000),
                                 filterId="SSC-singlet")
   gs_pop_add(gs, SSC_singlets, parent = "FSC-singlet")
+
   recompute(gs)
-  paths <- gs_get_pop_paths(gs[[1]])[-1] # what was this?
+
+  paths <- gs_get_pop_paths(gs[[1]])[-1]
   list(paths,
        gs
-  )
+       )
 }
