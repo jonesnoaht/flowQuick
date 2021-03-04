@@ -1,27 +1,16 @@
 Package: BTIPFlow
-Title: What the Package Does (One Line, Title Case)
+Title: What the Package Does (This Package Assists with Flow Analysis)
 Version: 0.0.0.9000
-Authors@R: 
-<<<<<<< HEAD
-    person(given = "Noah",
-           family = "Jones",
-           role = c("aut", "cre"),
-           email = "noahtjones@ufl.edu",
-=======
-    person(given = "First",
-           family = "Last",
-           role = c("aut", "cre"),
-           email = "first.last@example.com",
->>>>>>> eea9a209f275dc0b1b3cc2026b2f728291fb1a48
-           comment = c(ORCID = "YOUR-ORCID-ID"))
-Description: What the package does (one paragraph).
+Authors@R: Noah
+Description: This package tries to make the process of analyzing flow data easier and more automatic for more R users.
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.1
+Depends: 
+    R (>= 2.10)
 Imports: 
-<<<<<<< HEAD
     utils,
     flowCore,
     flowWorkspace,
@@ -35,8 +24,3 @@ Imports:
     gridExtra,
     grid,
     tidyr
-Depends: 
-    R (>= 2.10)
-=======
-    utils
->>>>>>> eea9a209f275dc0b1b3cc2026b2f728291fb1a48
