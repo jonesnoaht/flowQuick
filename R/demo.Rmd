@@ -1,0 +1,30 @@
+---
+title: "Demo"
+author: "Noah Jones"
+date: "3/4/2021"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Demo
+
+```{r Generate and Clean}
+fs <- generate_flowset(folder)
+clean_data(fs)
+```
+
+```{r Regenerate FlowSet}
+resQC <- read.flowSet(path = "resQC/", pattern = ".*fcs")
+```
+
+```{r}
+comp <- compensate_data(comp_controls, 'BV421-A|FITC-A|BV510', 1)
+gs.uncomped <- GatingSet(resQC)
+gs.comped <- compensate(gs.uncomped, comp[[2]])
+gs.gated[[2]] <- quick_gate(gs.comped)
+
+```
+
