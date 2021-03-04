@@ -2,10 +2,10 @@ Package: BTIPFlow
 Title: What the Package Does (One Line, Title Case)
 Version: 0.0.0.9000
 Authors@R: 
-    person(given = "First",
-           family = "Last",
+    person(given = "Noah",
+           family = "Jones",
            role = c("aut", "cre"),
-           email = "first.last@example.com",
+           email = "noahtjones@ufl.edu",
            comment = c(ORCID = "YOUR-ORCID-ID"))
 Description: What the package does (one paragraph).
 License: MIT + file LICENSE
@@ -14,4 +14,18 @@ LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.1
 Imports: 
-    utils
+    utils,
+    flowCore,
+    flowWorkspace,
+    ggcyto,
+    cytolib,
+    flowAI,
+    flowStats,
+    plyr,
+    scales,
+    ggplot2,
+    gridExtra,
+    grid,
+    tidyr
+Depends: 
+    R (>= 2.10)
