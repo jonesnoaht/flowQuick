@@ -18,9 +18,8 @@ generate_flowset <- function(folder) {
 #' resQC <- read.flowSet(path = "resQC/", pattern = ".*fcs")
 #' @export
 clean_data <- function(fs) {
-  require(flowAI)
-  resQC <- flow_auto_qc(fs)
-  write.flowSet(resQC, "resQC")
+  resQC <- flowAI::flow_auto_qc(fs)
+  flowCore::write.flowSet(resQC, "resQC")
 }
 
 #' Compensate the Data
@@ -40,19 +39,19 @@ clean_data <- function(fs) {
 #' gs.comped <- compensate(gs.uncomped, spillover_matrix)
 #' @export
 compensate_data <- function(comp_controls, channels, us_num) {
-  controls <- read.flowSet(path = comp_controls,
-                           pattern = '.*Setup.*fcs')
+  controls <- flowCore::read.flowSet(path = comp_controls,
+                                     pattern = '.*Setup.*fcs')
   controls_summary <- summary(controls)
 
-  spillover_matrix <- spillover(controls,
-                                unstained = us_num,
-                                fsc = 'FSC-A',
-                                ssc = 'SSC-A',
-                                patt = channels,
-                                method = 'median',
-                                stain_match = 'intensity',
-                                useNormFilt = FALSE
-                                )
+  spillover_matrix <- flowCore::spillover(controls,
+                                          unstained = us_num,
+                                          fsc = 'FSC-A',
+                                          ssc = 'SSC-A',
+                                          patt = channels,
+                                          method = 'median',
+                                          stain_match = 'intensity',
+                                          useNormFilt = FALSE
+                                          )
   list(controls_summary,
        spillover_matrix
        )
@@ -63,6 +62,8 @@ compensate_data <- function(comp_controls, channels, us_num) {
 #' @return the paths generated and a gatingset with gates
 #' @export
 quick_gate <- function(gs) {
+  requireNamespace("flowCore")
+  ?requireNamespace("flowWorkspace")
   if (length(gs_get_pop_paths(gs)) > 1){
     gs_pop_remove(gs,paths[1])
     gs_pop_remove(gs,paths[2])
