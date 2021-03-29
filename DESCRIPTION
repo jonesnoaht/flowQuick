@@ -1,6 +1,6 @@
 Package: BTIPFlow
 Title: What the Package Does (This Package Assists with Flow Analysis)
-Version: 0.0.0.9001
+Version: 0.0.0.9002
 Authors@R: 
     person(given = "Noah",
            family = "Jones",
@@ -28,4 +28,12 @@ Imports:
     ggplot2,
     gridExtra,
     grid,
-    tidyr
+    tidyr,
+    CytoML,
+    ggthemes,
+    ggforce,
+    flowViz,
+    cytotidyr,
+    dplyr,
+    uwot,
+    Rtsne
