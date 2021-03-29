@@ -25,7 +25,7 @@ It will attempt to find the compensation
 controls using the regex '.*Setup.*fcs'
 }
 \examples{
-gs.uncomped <- GatingSet(resQC)
+gs.uncomped <- flowWorkspace::GatingSet(resQC)
 spillover_matrix <- compensate_data(comp_controls, 'BV421-A|BV570-A', 3)[[2]]
 gs.comped <- compensate(gs.uncomped, spillover_matrix)
 }

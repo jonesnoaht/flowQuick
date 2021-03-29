@@ -18,5 +18,5 @@ This cleans the data and exports them into a new folder
 \examples{
 clean_data(fs)
 # When you need to re-initialize your clean data:
-resQC <- read.flowSet(path = "resQC/", pattern = ".*fcs")
+resQC <- flowCore::read.flowSet(path = "resQC/", pattern = ".*fcs")
 }
