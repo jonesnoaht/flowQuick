@@ -38,6 +38,9 @@ Imports:
     uwot (>= 0.1.10.9000),
     Rtsne (>= 0.15),
     Biobase
-VignetteBuilder: knitr, rmarkdown
+VignetteBuilder: knitr
 Remotes: 
     jlmelville/uwot
+Suggests: 
+    rmarkdown,
+    knitr

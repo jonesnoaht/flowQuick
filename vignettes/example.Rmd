@@ -1,13 +1,20 @@
 ---
-title: "BTIPFlow example"
+title: "example"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{BTIPFlow example}
+  %\VignetteIndexEntry{example}
   %\VignetteEngine{knitr::rmarkdown}
-  \usepackage[utf8]{inputenc}
+  %\VignetteEncoding{UTF-8}
 ---
 
-```{r Setup}
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
 library(BTIPFlow)
 
 get_fcs_resultsQC(QC_folder = "./RG Microbiome -APCs panel/resultsQC/", 
@@ -128,3 +135,76 @@ for (i in 7:13) {
 
 ```
 
+Now you can plot your figures
+
+First we extract our data from our gatingset.
+
+```{r Extract}
+stats <- gs_pop_get_count_with_meta(gs)
+stats$`group` <- ""
+for (i in 1:length(stats$`tube names`)) {
+  if (grepl("ABX", stats[i]$`tube names`)) {
+    stats[i]$group <- "Antibiotic"
+  } else {
+    if (grepl("Ctrl", stats[i]$`tube names`) & !grepl("spleen", stats[i]$`tube names`)) {
+      stats[i]$group <- "Control"
+    }
+  }
+}
+```
+
+Next we refine our data and generate a new column with absolute bead counts.
+
+```{r Refine}
+abs <- data.frame()
+stats %>% filter(group != "") -> stats_good
+stats_good$`tube name` %>% factor() %>% levels() -> levels_i
+(stats_good %>% filter(grepl("pos", Population)))$Population %>% factor() %>% levels() -> levels_j
+for (i in levels_i) {
+  for (j in levels_j) {
+    x <- c(i, j, ((stats_good %>% filter(`tube names` == i, `Population` == j) %>% select(`Count`))[[1]] / (stats_good %>% filter(`tube names` == i, `Population` == "/beads") %>% select(`Count`))[[1]] * 1e+04))
+    abs <- rbind(abs, x)
+  }
+}
+abs <- cbind(abs, rep("", nrow(abs)))
+colnames(abs) <- c("tube", "pop", "abs_count", "group")
+abs$abs_count <- as.numeric(abs$abs_count)
+for (i in 1:length(abs$`tube`)) {
+  if (grepl("ABX", abs$`tube`[i])) {
+    abs$group[i] <- "Antibiotic"
+  } else {
+    if (grepl("Ctrl", abs$`tube`[i])) {
+      abs$group[i] <- "Control"
+    }
+  }
+}
+```
+
+The default plot titles will be terrible unless we do something about the population names.
+
+```{r Abbreviate Populations}
+abs$pop <- sub("/scatter/FSC-singlet/SSC-singlet/Live dead neg/", "", abs$pop)
+abs$pop <- sub("/scatter/FSC-singlet/SSC-singlet/", "", abs$pop)
+```
+
+Then we generate the plots.
+
+```{r Plot}
+ggplot(abs, aes(x = group, y = abs_count)) + 
+  geom_jitter() + 
+  ylim(0, 1.4*max(abs$abs_count)) +
+  stat_summary(geom = "errorbar", 
+                 width = .2, 
+                 position = position_dodge(), 
+                 color = 2, 
+                 fun.data = mean_se
+                 ) +
+    geom_signif(comparisons = list(c("Control", "Antibiotic")),
+      test = "t.test",
+      y_position = max(abs$abs_count), 
+      step_increase = .1
+    ) + 
+    theme_pubr() +
+  facet_wrap(~`pop`)
+ggsave("ctrl_vs_abx.pdf", width = 7)
+```
