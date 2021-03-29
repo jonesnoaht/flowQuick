@@ -2,7 +2,6 @@
 
 export(clean_data)
 export(compensate_data)
-export(f)
 export(generate_flowset)
 export(get_fcs_resultsQC)
 export(make_gates_from_fmos)
