@@ -217,8 +217,6 @@ get_fcs_resultsQC <- function(QC_folder = "./resultsQC/",
 #'
 #' @return a gating set
 #' @export
-#'
-#' @examples
 make_gs <- function(cyto_set) {
   gating_set <- GatingSet(cyto_set)
   pData(gating_set) <- cbind(pData(gating_set),row.names(pData(gating_set)))
