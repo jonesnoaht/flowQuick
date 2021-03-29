@@ -17,7 +17,7 @@ Depends:
     R (>= 4.0.0)
 Imports: 
     utils,
-    flowCore,
+    flowCore (>= 2.2.0),
     flowWorkspace,
     ggcyto,
     cytolib,
@@ -35,6 +35,9 @@ Imports:
     flowViz,
     cytotidyr,
     dplyr,
-    uwot,
-    Rtsne
+    uwot (>= 0.1.10.9000),
+    Rtsne (>= 0.15),
+    Biobase
 VignetteBuilder: knitr, rmarkdown
+Remotes: 
+    jlmelville/uwot

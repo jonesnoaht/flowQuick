@@ -15,7 +15,7 @@ generate_flowset <- function(folder) {
 #' @examples
 #' clean_data(fs)
 #' # When you need to re-initialize your clean data:
-#' resQC <- read.flowSet(path = "resQC/", pattern = ".*fcs")
+#' resQC <- flowCore::read.flowSet(path = "resQC/", pattern = ".*fcs")
 #' @export
 clean_data <- function(fs) {
   resQC <- flowAI::flow_auto_qc(fs)
@@ -34,7 +34,7 @@ clean_data <- function(fs) {
 #' @return a list with a summary of the comp controls and a
 #' spillover matrix
 #' @examples
-#' gs.uncomped <- GatingSet(resQC)
+#' gs.uncomped <- flowWorkspace::GatingSet(resQC)
 #' spillover_matrix <- compensate_data(comp_controls, 'BV421-A|BV570-A', 3)[[2]]
 #' gs.comped <- compensate(gs.uncomped, spillover_matrix)
 #' @export
@@ -78,18 +78,18 @@ quick_gate <- function(gs) {
                  ncol=2, byrow = TRUE)
   colnames(pgon) <- c("FSC-A","SSC-A")
 
-  cells <- polygonGate(.gate = pgon, filterId="Cells")
-  gs_pop_add(gs, cells)
-  FSC_singlets <- rectangleGate("FSC-H"=c(50, 15000),
+  cells <- flowCore::polygonGate(.gate = pgon, filterId="Cells")
+  flowWorkspace::gs_pop_add(gs, cells)
+  FSC_singlets <- flowCore::rectangleGate("FSC-H"=c(50, 15000),
                                 "FSC-W"=c(50000, 100000),
                                 filterId="FSC-singlet")
-  gs_pop_add(gs, FSC_singlets, parent = "Cells")
-  SSC_singlets <- rectangleGate("SSC-H"=c(50, 15000),
+  flowWorkspace::gs_pop_add(gs, FSC_singlets, parent = "Cells")
+  SSC_singlets <- flowCore::rectangleGate("SSC-H"=c(50, 15000),
                                 "SSC-W"=c(50000, 100000),
                                 filterId="SSC-singlet")
-  gs_pop_add(gs, SSC_singlets, parent = "FSC-singlet")
+  flowWorkspace::gs_pop_add(gs, SSC_singlets, parent = "FSC-singlet")
 
-  recompute(gs)
+  flowWorkspace::recompute(gs)
 
   paths <- gs_get_pop_paths(gs[[1]])[-1]
   list(paths,
@@ -129,9 +129,9 @@ set_scatter_gate <- function(gating_set = gs,
                     ncol = 2,
                     data = gate_coordinates)
   colnames(scatter) <- dimensions
-  scatter <- polygonGate(scatter, filterId = gate_name)
-  gs_pop_add(gating_set, scatter, name = gate_name, parent = parent)
-  recompute(gs)
+  scatter <- flowCore::polygonGate(scatter, filterId = gate_name)
+  flowWorkspace::gs_pop_add(gating_set, scatter, name = gate_name, parent = parent)
+  flowWorkspace::recompute(gs)
   gating_set
 }
 
@@ -163,13 +163,13 @@ test_plot <- function(gating_set = gs,
                       parent = "root",
                       dimensions = list("FSC-A",
                                         "SSC-A")) {
-  recompute(gating_set)
+  flowWorkspace::recompute(gating_set)
   matrix(byrow = TRUE,
          ncol = 2,
          data = gate_coordinates) %>%
     data.frame() -> gate_coordinates_df
   colnames(gate_coordinates_df) <- c("x","y")
-  gs_pop_get_data(gating_set, parent) %>%
+  flowWorkspace::gs_pop_get_data(gating_set, parent) %>%
     autoplot(x = dimensions[[1]],
              y = dimensions[[2]],
              bins = 256) +
@@ -194,21 +194,21 @@ test_plot <- function(gating_set = gs,
 get_fcs_resultsQC <- function(QC_folder = "./resultsQC/",
                               raw_folder = "./rawData/") {
   cs <- c()
-  try(cs <- read.flowSet(path = folder,
+  try(cs <- flowCore::read.flowSet(path = folder,
                          pattern = ".fcs"))
   if (length(cs) == 0) {
-    theme_set(theme_clean())
-    read.flowSet(path = raw_folder,
+    ggplot2::theme_set(theme_clean())
+    flowCore::read.flowSet(path = raw_folder,
                  pattern = ".fcs") %>%
-      flow_auto_qc() %>%
-      flowSet_to_cytoset() -> cs
+      flowAI::flow_auto_qc() %>%
+      flowWorkspace::flowSet_to_cytoset() -> cs
   }
   new_sample_names <- c()
   for (i in 1:length(cs)) {
     new_sample_names <- c(new_sample_names,
-                          keyword(cs[[i]])$`TUBE NAME`)
+                          flowWorkspace::keyword(cs[[i]])$`TUBE NAME`)
   }
-  sampleNames(cs) <- new_sample_names
+  flowWorkspace::sampleNames(cs) <- new_sample_names
   cs
 }
 #' Make Gating Set
@@ -218,11 +218,11 @@ get_fcs_resultsQC <- function(QC_folder = "./resultsQC/",
 #' @return a gating set
 #' @export
 make_gs <- function(cyto_set) {
-  gating_set <- GatingSet(cyto_set)
-  pData(gating_set) <- cbind(pData(gating_set),row.names(pData(gating_set)))
-  colnames(pData(gating_set))[2] <- "tube names"
+  gating_set <- flowWorkspace::GatingSet(cyto_set)
+  Biobase::pData(gating_set) <- cbind(Biobase::pData(gating_set),row.names(Biobase::pData(gating_set)))
+  colnames(Biobase::pData(gating_set))[2] <- "tube names"
   for (i in 1:length(gating_set)) {
-    pData(gating_set[[i]])$`tube names` <- keyword(gating_set[[i]])$`TUBE NAME`
+    Biobase::pData(gating_set[[i]])$`tube names` <- flowWorkspace::keyword(gating_set[[i]])$`TUBE NAME`
   }
   gating_set
 }
@@ -243,14 +243,14 @@ make_gates_from_fmos <- function(gating_set = gs,
                                  parent = "SSC-singlet",
                                  trim = 0){
   l <- list()
-  mn <- markernames(gating_set[[1]])
-  for (i in sampleNames(gating_set)) {
+  mn <- flowWorkspace::markernames(gating_set[[1]])
+  for (i in flowWorkspace::sampleNames(gating_set)) {
     if (grepl("FMO", i)) {
       for (a in 1:(length(mn) - trim)) {
         if (grepl(mn[[a]], i)) {
-          gs_pop_get_data(gating_set[[i]], parent) %>%
-            fortify() %>%
-            pull(names(mn[a])) %>%
+          flowWorkspace::gs_pop_get_data(gating_set[[i]], parent) %>%
+            ggplot2::fortify() %>%
+            dplyr::pull(names(mn[a])) %>%
             quantile(.99) -> max
           l[[ names(mn[a]) ]] <- max[[1]]
         }
@@ -263,8 +263,8 @@ make_gates_from_fmos <- function(gating_set = gs,
       gate_name <- paste(mn[[ names(l[i]) ]], "neg")
       min_max <- list()
       min_max[[ names(l[i]) ]] <-  c(l[[i]], -Inf)
-      gate <- rectangleGate(filterId = gate_name, min_max)
-      gs_pop_add(gating_set, gate, name = gate_name, parent = parent)
+      gate <- flowCore::rectangleGate(filterId = gate_name, min_max)
+      flowWorkspace::gs_pop_add(gating_set, gate, name = gate_name, parent = parent)
       have_ld <- TRUE
       ld_gate_name <- gate_name
     }
@@ -274,16 +274,16 @@ make_gates_from_fmos <- function(gating_set = gs,
       gate_name <- paste(mn[[ names(l[i]) ]], "pos")
       min_max <- list()
       min_max[[ names(l[i]) ]] <-  c(l[[i]], Inf)
-      gate <- rectangleGate(filterId = gate_name, min_max)
-      gs_pop_add(gating_set, gate, name = gate_name, parent = ld_gate_name)
+      gate <- flowCore::rectangleGate(filterId = gate_name, min_max)
+      flowWorkspace::gs_pop_add(gating_set, gate, name = gate_name, parent = ld_gate_name)
     } else {
       gate_name <- paste(mn[[ names(l[i]) ]], "pos")
       min_max <- list()
       min_max[[ names(l[i]) ]] <-  c(l[[i]], Inf)
-      gate <- rectangleGate(filterId = gate_name, min_max)
-      gs_pop_add(gating_set, gate, name = gate_name, parent = parent)
+      gate <- flowCore::rectangleGate(filterId = gate_name, min_max)
+      flowWorkspace::gs_pop_add(gating_set, gate, name = gate_name, parent = parent)
     }
   }
-  recompute(gating_set)
+  flowWorkspace::recompute(gating_set)
   gating_set
 }
