@@ -5,6 +5,12 @@ I have included a test dataset that contains several flow samples (it is a flows
 
 This will hopefully automate most flow cytometry experiments. For your particular experiment, you can tweak the code found in the "example" vignette.
 
+You can install with 
+
+```{R}
+devtools::install_github("jonesnoaht/BTIPFlow")
+```
+
 ## Notes
 
 This provides some excellent information about versioning. https://r-pkgs.org/release.html
