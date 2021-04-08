@@ -103,7 +103,7 @@ quick_gate <- function(gs) {
 #' @param gate_name the name by which you will call the gate
 #' @param dimensions the X and Y parameters of the gate (in that order) as strings in a list
 #' @param parent a string; the name of the parent gate
-#'
+#' @importFrom magrittr "%>%"
 #' @return modified gating set
 #' @export
 #'
@@ -143,6 +143,7 @@ set_scatter_gate <- function(gating_set = gs,
 #' @param dimensions the X and Y parameters of the gate (in that order) as strings in a list
 #'
 #' @return a plot
+#' @importFrom magrittr "%>%"
 #' @export
 #'
 #' @examples
@@ -182,7 +183,7 @@ test_plot <- function(gating_set = gs,
 #'
 #' @param QC_folder the path to the folder with the QCed data
 #' @param raw_folder the path to the folder with the raw files
-#'
+#' @importFrom magrittr "%>%"
 #' @return a cytoset with QCed data
 #' @export
 #'
@@ -231,7 +232,7 @@ make_gs <- function(cyto_set) {
 #' @param gating_set a gating set
 #' @param parent the name of the parent population
 #' @param trim how many to remove from the end of the markernames list
-#'
+#' @importFrom magrittr "%>%"
 #' @return a gating set
 #' @export
 #'
