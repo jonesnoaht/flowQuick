@@ -197,7 +197,7 @@ get_fcs_resultsQC <- function(QC_folder = "./resultsQC/",
   try(cs <- flowCore::read.flowSet(path = folder,
                          pattern = ".fcs"))
   if (length(cs) == 0) {
-    ggplot2::theme_set(theme_clean())
+    ggplot2::theme_set(ggthemes::theme_clean())
     flowCore::read.flowSet(path = raw_folder,
                  pattern = ".fcs") %>%
       flowAI::flow_auto_qc() %>%
