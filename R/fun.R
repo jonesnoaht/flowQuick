@@ -176,8 +176,8 @@ test_plot <- function(gating_set = gs,
     ggcyto::autoplot(x = dimensions[[1]],
              y = dimensions[[2]],
              bins = 256) +
-    geom_shape(data = gate_coordinates_df,
-               aes(x = x,
+    ggplot2::geom_shape(data = gate_coordinates_df,
+               ggplot2::aes(x = x,
                    y = y,
                    alpha = 0.1))
 }
