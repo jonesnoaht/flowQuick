@@ -1,6 +1,6 @@
 Package: BTIPFlow
 Title: What the Package Does (This Package Assists with Flow Analysis)
-Version: 0.0.0.9005
+Version: 0.0.0.9006
 Authors@R: 
     person(given = "Noah",
            family = "Jones",

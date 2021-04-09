@@ -33,6 +33,7 @@ clean_data <- function(fs) {
 #' the set
 #' @return a list with a summary of the comp controls and a
 #' spillover matrix
+#' @import flowCore
 #' @examples
 #' gs.uncomped <- flowWorkspace::GatingSet(resQC)
 #' spillover_matrix <- compensate_data(comp_controls, 'BV421-A|BV570-A', 3)[[2]]
@@ -65,10 +66,10 @@ quick_gate <- function(gs) {
   requireNamespace("flowCore")
   requireNamespace("flowWorkspace")
   if (length(gs_get_pop_paths(gs)) > 1){
-    gs_pop_remove(gs,paths[1])
-    gs_pop_remove(gs,paths[2])
+    flowWorkspace::gs_pop_remove(gs,paths[1])
+    flowWorkspace::gs_pop_remove(gs,paths[2])
   }
-  gs_get_pop_paths(gs)
+  flowWorkspace::gs_get_pop_paths(gs)
 
   pgon <- matrix(c(10^4, 1,
                    10^4, 10^4,
@@ -171,7 +172,7 @@ test_plot <- function(gating_set = gs,
     data.frame() -> gate_coordinates_df
   colnames(gate_coordinates_df) <- c("x","y")
   flowWorkspace::gs_pop_get_data(gating_set, parent) %>%
-    autoplot(x = dimensions[[1]],
+    ggcyto::autoplot(x = dimensions[[1]],
              y = dimensions[[2]],
              bins = 256) +
     geom_shape(data = gate_coordinates_df,
