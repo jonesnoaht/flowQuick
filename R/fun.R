@@ -18,6 +18,7 @@ generate_flowset <- function(folder) {
 #' resQC <- flowCore::read.flowSet(path = "resQC/", pattern = ".*fcs")
 #' @export
 clean_data <- function(fs) {
+  .Deprecated("get_fcs_resultsQC")
   resQC <- flowAI::flow_auto_qc(fs)
   flowCore::write.flowSet(resQC, "resQC")
 }
