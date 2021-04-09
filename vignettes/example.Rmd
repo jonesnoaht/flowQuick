@@ -58,7 +58,7 @@ set_scatter_gate(gating_set = gs,
                  gate_name = "FSC-singlet", 
                  parent = "scatter",
                  dimensions = list("FSC-W", "FSC-H")
-)
+                 )
 
 set_scatter_gate(gating_set = gs, 
                  gate_coordinates = c(0.4e+05, 0.3e+05,
@@ -68,7 +68,7 @@ set_scatter_gate(gating_set = gs,
                  gate_name = "SSC-singlet", 
                  parent = "FSC-singlet",
                  dimensions = list("SSC-W", "SSC-H")
-)
+                 )
 
 make_gates_from_fmos(gating_set = gs, parent = "SSC-singlet", trim = 1)
 
