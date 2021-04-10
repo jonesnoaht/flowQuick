@@ -166,12 +166,12 @@ Next we refine our data and generate a new column with absolute bead counts.
 
 ```{r Refine}
 abs <- data.frame()
-stats %>% filter(group != "") -> stats_good
+stats %>% dplyr::filter(group != "") -> stats_good
 stats_good$`tube name` %>% factor() %>% levels() -> levels_i
-(stats_good %>% filter(grepl("pos", Population)))$Population %>% factor() %>% levels() -> levels_j
+(stats_good %>% dplyr::filter(grepl("pos", Population)))$Population %>% factor() %>% levels() -> levels_j
 for (i in levels_i) {
   for (j in levels_j) {
-    x <- c(i, j, ((stats_good %>% filter(`tube names` == i, `Population` == j) %>% select(`Count`))[[1]] / (stats_good %>% filter(`tube names` == i, `Population` == "/beads") %>% select(`Count`))[[1]] * 1e+04))
+    x <- c(i, j, ((stats_good %>% dplyr::filter(`tube names` == i, `Population` == j) %>% select(`Count`))[[1]] / (stats_good %>% dplyr::filter(`tube names` == i, `Population` == "/beads") %>% select(`Count`))[[1]] * 1e+04))
     abs <- rbind(abs, x)
   }
 }
@@ -208,12 +208,12 @@ ggplot(abs, aes(x = group, y = abs_count)) +
                  color = 2, 
                  fun.data = mean_se
                  ) +
-    geom_signif(comparisons = list(c("Control", "Antibiotic")),
+    ggsignif::geom_signif(comparisons = list(c("Control", "Antibiotic")),
       test = "t.test",
       y_position = max(abs$abs_count), 
       step_increase = .1
     ) + 
-    theme_pubr() +
+    ggpubr::theme_pubr() +
   facet_wrap(~`pop`)
 ggsave("ctrl_vs_abx.pdf", width = 7)
 ```
