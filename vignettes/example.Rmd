@@ -15,14 +15,23 @@ knitr::opts_chunk$set(
 ```
 
 ```{r setup}
+library(tidyverse)
 library(BTIPFlow)
-
-get_fcs_resultsQC(QC_folder = "./RG Microbiome -APCs panel/resultsQC/", 
-                  raw_folder = "../20200810NJ-ACEFlow/good/") -> cs
-
+library(flowCore)
+library(flowViz)
+library(flowWorkspace)
+library(ggcyto)
+library(cytotidyr)
 ```
 
+```{r eval=FALSE, include=FALSE}
+get_fcs_resultsQC(QC_folder = "./RG Microbiome -APCs panel/resultsQC/", 
+                  raw_folder = "../20200810NJ-ACEFlow/good/") -> cs
+```
+
+
 ```{r}
+data(cs)
 gs <- GatingSet(cs)
 sampleNames(gs)[6] <- "APCs_CD11C FMO_QC.fcs"
 sampleNames(gs)[9] <- "APCs_CD45 FMO_QC.fcs"

@@ -16,6 +16,12 @@ knitr::opts_chunk$set(
 
 ```{r setup}
 library(BTIPFlow)
+library(tidyverse)
+library(BTIPFlow)
+library(flowCore)
+library(flowWorkspace)
+library(ggcyto)
+library(cytotidyr)
 ```
 
 ## Demo
@@ -23,12 +29,9 @@ library(BTIPFlow)
 This is the original demo.
 
 ```{r Generate and Clean}
-fs <- generate_flowset(folder)
-clean_data(fs)
-```
-
-```{r Regenerate FlowSet}
-resQC <- read.flowSet(path = "resQC/", pattern = ".*fcs")
+# fs <- generate_flowset(folder)
+data(fs)
+resQC <- clean_data(fs)
 ```
 
 ```{r}

@@ -290,3 +290,12 @@ make_gates_from_fmos <- function(gating_set = gs,
   flowWorkspace::recompute(gating_set)
   gating_set
 }
+
+#' A clean cytoset for practice
+#'
+#' Just something I am borrowing from an experiment.
+#'
+#' @format A cytoset
+#'
+#' @source Rekha Garg, Natalie Silver
+"cs"
