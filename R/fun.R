@@ -206,12 +206,12 @@ get_fcs_resultsQC <- function(QC_folder = "./resultsQC/",
       flowAI::flow_auto_qc() %>%
       flowWorkspace::flowSet_to_cytoset() -> cs
   }
-  new_sample_names <- c()
-  for (i in 1:length(cs)) {
-    new_sample_names <- c(new_sample_names,
-                          flowWorkspace::keyword(cs[[i]])$`TUBE NAME`)
-  }
-  flowWorkspace::sampleNames(cs) <- new_sample_names
+  # new_sample_names <- c()
+  # for (i in 1:length(cs)) {
+  #   new_sample_names <- c(new_sample_names,
+  #                         flowWorkspace::keyword(cs[[i]])$`TUBE NAME`)
+  # }
+  # flowWorkspace::sampleNames(cs) <- new_sample_names
   cs
 }
 #' Make Gating Set
