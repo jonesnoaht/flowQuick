@@ -106,7 +106,7 @@ quick_gate <- function(gs) {
 #' @param dimensions the X and Y parameters of the gate (in that order) as strings in a list
 #' @param parent a string; the name of the parent gate
 #' @importFrom magrittr "%>%"
-#' @return modified gating set
+#' @return filter
 #' @export
 #'
 #' @examples
@@ -133,8 +133,8 @@ set_scatter_gate <- function(gating_set = gs,
   colnames(scatter) <- dimensions
   scatter <- flowCore::polygonGate(scatter, filterId = gate_name)
   flowWorkspace::gs_pop_add(gating_set, scatter, name = gate_name, parent = parent)
-  flowWorkspace::recompute(gs)
-  gating_set
+  flowWorkspace::recompute(gating_set)
+  scatter
 }
 
 #' Try your gate before setting your gate
@@ -183,6 +183,12 @@ test_plot <- function(gating_set = gs,
 }
 #' Load your QC results or, if none, run QC on your data
 #'
+#' @details
+#' Only use this feature if you are in the parent folder of the files
+#' with which you are working. If the filepath is too long or perhapse
+#' has some odd characters, then you read.flowSet() may have some
+#' difficulties.
+#'
 #' @param QC_folder the path to the folder with the QCed data
 #' @param raw_folder the path to the folder with the raw files
 #' @importFrom magrittr "%>%"
@@ -192,16 +198,24 @@ test_plot <- function(gating_set = gs,
 #' @examples
 #' \dontrun{
 #' get_fcs_resultsQC(QC_folder = "./RG Microbiome -APCs panel/resultsQC/",
-#'                   raw_folder = "../20200810NJ-ACEFlow/good/")
+#'                   raw_folder = "../20200810NJ-ACEFlow/good/") +
+#'                   scale_x_continuous(breaks = seq(0, 10^6, 0.1*10^2),
+#'                                      labels = label_scientific()) +
+#'                   scale_y_continuous(breaks = seq(0, 10^6, 2*10^3),
+#'                                      labels = label_scientific()) +
+#'                   scale_x_flowjo_biexp()
 #' }
 get_fcs_resultsQC <- function(QC_folder = "./resultsQC/",
                               raw_folder = "./rawData/") {
   cs <- c()
-  try(cs <- flowCore::read.flowSet(path = QC_folder,
+  try(cs <- flowCore::read.flowSet(dir(QC_folder, pattern = "*.fcs"), path = QC_folder,
                          pattern = ".fcs"))
+  cs <- read.flowSet(,
+                     path = "/Users/noahjones/Dropbox (UFL)/Noah Notebook/Projects/Multi-adaptable Cell Engager (MACE)/NJ012 BiTE Prototype/resultsQC/")
   if (length(cs) == 0) {
     ggplot2::theme_set(ggthemes::theme_clean())
-    flowCore::read.flowSet(path = raw_folder,
+    flowCore::read.flowSet(dir(raw_folder, pattern = "*.fcs"),
+                            path = raw_folder,
                  pattern = ".fcs") %>%
       flowAI::flow_auto_qc() %>%
       flowWorkspace::flowSet_to_cytoset() -> cs
@@ -289,6 +303,22 @@ make_gates_from_fmos <- function(gating_set = gs,
   }
   flowWorkspace::recompute(gating_set)
   gating_set
+}
+
+#' Update Gate
+#'
+#' @param gs a gating set
+#' @param gate the ID of the gate
+#' @param filter the new filter object
+#' @param parent the parent node
+#'
+#' @export
+update_gate <- function(gs, gate, filter, parent) {
+  if (is.null(parent)) {
+    parent <- flowWorkspace::gs_pop_get_parent(gs, gate)
+  }
+  flowWorkspace::gs_pop_remove(gs, gate)
+  flowWorkspace::gs_pop_add(gs, filter, parent)
 }
 
 #' A clean cytoset for practice

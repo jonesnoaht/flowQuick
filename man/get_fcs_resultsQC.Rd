@@ -17,6 +17,12 @@ a cytoset with QCed data
 \description{
 Load your QC results or, if none, run QC on your data
 }
+\details{
+Only use this feature if you are in the parent folder of the files
+with which you are working. If the filepath is too long or perhapse
+has some odd characters, then you read.flowSet() may have some
+difficulties.
+}
 \examples{
 \dontrun{
 get_fcs_resultsQC(QC_folder = "./RG Microbiome -APCs panel/resultsQC/",
