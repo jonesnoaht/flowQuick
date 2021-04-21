@@ -210,22 +210,14 @@ get_fcs_resultsQC <- function(QC_folder = "./resultsQC/",
   cs <- c()
   try(cs <- flowCore::read.flowSet(dir(QC_folder, pattern = "*.fcs"), path = QC_folder,
                          pattern = ".fcs"))
-  cs <- read.flowSet(,
-                     path = "/Users/noahjones/Dropbox (UFL)/Noah Notebook/Projects/Multi-adaptable Cell Engager (MACE)/NJ012 BiTE Prototype/resultsQC/")
   if (length(cs) == 0) {
     ggplot2::theme_set(ggthemes::theme_clean())
     flowCore::read.flowSet(dir(raw_folder, pattern = "*.fcs"),
                             path = raw_folder,
                  pattern = ".fcs") %>%
-      flowAI::flow_auto_qc() %>%
+      flowAI::flow_auto_qc(folder_results = QC_folder) %>%
       flowWorkspace::flowSet_to_cytoset() -> cs
   }
-  # new_sample_names <- c()
-  # for (i in 1:length(cs)) {
-  #   new_sample_names <- c(new_sample_names,
-  #                         flowWorkspace::keyword(cs[[i]])$`TUBE NAME`)
-  # }
-  # flowWorkspace::sampleNames(cs) <- new_sample_names
   cs
 }
 #' Make Gating Set
