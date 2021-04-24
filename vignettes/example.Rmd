@@ -29,6 +29,11 @@ get_fcs_resultsQC(QC_folder = "./RG Microbiome -APCs panel/resultsQC/",
                   raw_folder = "../20200810NJ-ACEFlow/good/") -> cs
 ```
 
+```{r Tricks, eval=FALSE, include=FALSE}
+data(cs)
+cs[[1]]@exprs[cs[[1]] %in% good_events]
+blue[grepl("Comp", sampleNames(blue))]
+```
 
 ```{r}
 data(cs)
@@ -43,6 +48,12 @@ colnames(pData(gs))[2] <- "tube names"
 for (i in 1:length(gs)) {
   pData(gs[[i]])$`tube names` <- keyword(gs[[i]])$`TUBE NAME`
 }
+
+good_events <- rectangleGate(filterId = "Good Events", "remove_from_all" = c(0,9999))
+bad_events <- rectangleGate(filterId = "Bad Events", "remove_from_all" = c(10000,19999))
+
+gs_pop_add(gs, good_events)
+gs_pop_add(gs, bad_events)
 
 set_scatter_gate(gating_set = gs,
                  gate_coordinates = c(2.0e+04, 2.0e+04,

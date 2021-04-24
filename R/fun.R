@@ -239,7 +239,8 @@ make_gs <- function(cyto_set) {
 #'
 #' @param gating_set a gating set
 #' @param parent the name of the parent population
-#' @param trim how many to remove from the end of the markernames list
+#' @param trim how many to remove from the end of the markernames list (likely necessary because of QC)
+#' @param search_term what string must this function use to identify the FMO?
 #' @importFrom magrittr "%>%"
 #' @return a gating set
 #' @export
@@ -250,11 +251,12 @@ make_gs <- function(cyto_set) {
 #' }
 make_gates_from_fmos <- function(gating_set = gs,
                                  parent = "SSC-singlet",
-                                 trim = 0){
+                                 trim = 0,
+                                 search_term = "FMO"){
   l <- list()
   mn <- flowWorkspace::markernames(gating_set[[1]])
   for (i in flowWorkspace::sampleNames(gating_set)) {
-    if (grepl("FMO", i)) {
+    if (grepl(search_term, i)) {
       for (a in 1:(length(mn) - trim)) {
         if (grepl(mn[[a]], i)) {
           flowWorkspace::gs_pop_get_data(gating_set[[i]], parent) %>%
