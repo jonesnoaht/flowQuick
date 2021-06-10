@@ -26,6 +26,11 @@ difficulties.
 \examples{
 \dontrun{
 get_fcs_resultsQC(QC_folder = "./RG Microbiome -APCs panel/resultsQC/",
-                  raw_folder = "../20200810NJ-ACEFlow/good/")
+                  raw_folder = "../20200810NJ-ACEFlow/good/") +
+                  scale_x_continuous(breaks = seq(0, 10^6, 0.1*10^2),
+                                     labels = label_scientific()) +
+                  scale_y_continuous(breaks = seq(0, 10^6, 2*10^3),
+                                     labels = label_scientific()) +
+                  scale_x_flowjo_biexp()
 }
 }

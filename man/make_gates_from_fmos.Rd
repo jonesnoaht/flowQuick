@@ -4,14 +4,21 @@
 \alias{make_gates_from_fmos}
 \title{Set gates based on fluorescence-minus-one (FMO) controls}
 \usage{
-make_gates_from_fmos(gating_set = gs, parent = "SSC-singlet", trim = 0)
+make_gates_from_fmos(
+  gating_set = gs,
+  parent = "SSC-singlet",
+  trim = 0,
+  search_term = "FMO"
+)
 }
 \arguments{
 \item{gating_set}{a gating set}
 
 \item{parent}{the name of the parent population}
 
-\item{trim}{how many to remove from the end of the markernames list}
+\item{trim}{how many to remove from the end of the markernames list (likely necessary because of QC)}
+
+\item{search_term}{what string must this function use to identify the FMO?}
 }
 \value{
 a gating set

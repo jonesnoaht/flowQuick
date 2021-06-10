@@ -208,15 +208,15 @@ test_plot <- function(gating_set = gs,
 get_fcs_resultsQC <- function(QC_folder = "./resultsQC/",
                               raw_folder = "./rawData/") {
   cs <- c()
-  try(cs <- flowCore::read.flowSet(dir(QC_folder, pattern = "*.fcs"), path = QC_folder,
+  try(cs <- flowCore::read.flowSet(dir(QC_folder, pattern = "*.fcs"),
+                                   path = QC_folder,
                          pattern = ".fcs"))
   if (length(cs) == 0) {
     ggplot2::theme_set(ggthemes::theme_clean())
     flowCore::read.flowSet(dir(raw_folder, pattern = "*.fcs"),
                             path = raw_folder,
                  pattern = ".fcs") %>%
-      flowAI::flow_auto_qc(folder_results = QC_folder) %>%
-      flowWorkspace::flowSet_to_cytoset() -> cs
+      flowAI::flow_auto_qc(folder_results = QC_folder) -> cs
   }
   cs
 }

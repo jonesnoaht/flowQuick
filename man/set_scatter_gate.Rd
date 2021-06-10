@@ -24,7 +24,7 @@ set_scatter_gate(
 \item{parent}{a string; the name of the parent gate}
 }
 \value{
-modified gating set
+filter
 }
 \description{
 Set a polygon gate
