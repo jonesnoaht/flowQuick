@@ -216,7 +216,10 @@ get_fcs_resultsQC <- function(QC_folder = "./resultsQC/",
     flowCore::read.flowSet(dir(raw_folder, pattern = "*.fcs"),
                             path = raw_folder,
                  pattern = ".fcs") %>%
-      flowAI::flow_auto_qc(folder_results = QC_folder) -> cs
+      flowAI::flow_auto_qc(folder_results = QC_folder)
+    cs <- flowCore::read.flowSet(dir(QC_folder, pattern = "*.fcs"),
+                                 path = QC_folder,
+                                 pattern = ".fcs")
   }
   cs
 }
