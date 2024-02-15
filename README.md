@@ -1,4 +1,4 @@
-# QuickFCm
+# flowQuick
 A package to make the analysis of flow data easier.
 
 I have included a test dataset that contains several flow samples (it is a flowset) that can be used to test the code. 
@@ -8,7 +8,7 @@ This will hopefully automate most flow cytometry experiments. For your particula
 You can install by running
 
 ```{R}
-devtools::install_github("jonesnoaht/QuickFCm")
+devtools::install_github("jonesnoaht/flowQuick")
 ```
 
 in your R console.
